@@ -1,0 +1,44 @@
+services:
+  aamdb:
+    image: mysql:9.7
+    container_name: Examen1-AntonyArias-db
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_DATABASE: db_inventario
+    ports:
+      - 3308:3306
+    volumes:
+      - ./db_dumb:/docker-entrypoint-initdb.d
+      - ./mysql_data:/var/lib/mysql
+    secrets:
+      - db_password
+
+  aamdatos:
+    container_name: Examen1-AntonyArias-datos
+    volumes:
+      - ./Data/public:/var/www/html/public
+      - ./Data/src:/var/www/html/src
+    build:
+      context: .
+      dockerfile: ./Data/Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - aamdb
+
+  aamnegocio:
+    container_name: Examen1-AntonyArias-negocio
+    volumes:
+      - ./Business/public:/var/www/html/public
+      - ./Business/src:/var/www/html/src
+    build:
+      context: .
+      dockerfile: ./Business/Dockerfile
+    ports:
+      - 9090:80
+    depends_on:
+      - aamdatos
+
+secrets:
+  db_password:
+    file: ./db_password.txt

@@ -1,0 +1,59 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/inventario_productos
+@id = 1
+
+### Listar todos los registros)
+GET {{uri}}
+Accept: application/json
+
+### Crear un nuevo registro
+POST {{uri}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "sku": "BOD-115",
+  "nombre_producto": "Cinta adhesiva",
+  "descripcion": "Cinta adhesiva de 10 metros",
+  "precio_unitario": 690.00,
+  "stock_actual": 30,
+  "categoria": "Papelería"
+}
+
+### Obtener un registro específico
+GET {{uri}}/7
+Accept: application/json
+
+
+### Actualizar un registro existente
+PUT {{uri}}/7
+Content-Type: application/json
+Accept: application/json
+
+{
+    "sku": "BOD-104",
+    "nombre_producto": "Lapicero negro",
+    "descripcion": "Lapicero de tinta negra y punta fina",
+    "precio_unitario": "290.00",
+    "stock_actual": 25,
+    "categoria": "Papelería"
+}
+
+
+### Eliminar un registro
+DELETE {{uri}}/7
+Accept: application/json
+
+
+### Validación de SKU obligatorio: 422
+POST {{uri}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "sku": "",
+    "nombre_producto": "Producto inválido",
+    "precio_unitario": 1000.00,
+    "stock_actual": 5,
+    "categoria": "Papelería"
+}
